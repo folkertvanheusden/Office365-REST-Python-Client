@@ -19,7 +19,7 @@ class SearchEntity(Entity):
     in Graph, but serves as an anchor to the query action.
     """
 
-    def query(self, query_string, entity_types=None):
+    def query(self, query_string, entity_types=None, row_limit=None, start_row=None):
         # type: (str, Optional[List[str]]) -> ClientResult[ClientValueCollection[SearchResponse]]
         """
         Runs the query specified in the request body. Search results are provided in the response.
@@ -29,7 +29,8 @@ class SearchEntity(Entity):
             Possible values are: list, site, listItem, message, event, drive, driveItem, externalItem.
         """
         search_request = SearchRequest(
-            query=SearchQuery(query_string), entity_types=entity_types
+            query=SearchQuery(query_string), entity_types=entity_types,
+            row_limit=row_limit, start_row=start_row
         )
         payload = {"requests": ClientValueCollection(SearchRequest, [search_request])}
         return_type = ClientResult(self.context, ClientValueCollection(SearchResponse))
@@ -50,23 +51,23 @@ class SearchEntity(Entity):
         self.context.add_query(qry).after_query_execute(_process_response)
         return return_type
 
-    def query_messages(self, query_string):
+    def query_messages(self, query_string, row_limit=None, start_row=None):
         """Searches Outlook messages. Alias to query method
         :param str query_string: Contains the query terms.
         """
-        return self.query(query_string, entity_types=[EntityType.message])
+        return self.query(query_string, entity_types=[EntityType.message], row_limit=row_limit, start_row=start_row)
 
-    def query_events(self, query_string):
+    def query_events(self, query_string, row_limit=None, start_row=None):
         """Searches Outlook calendar events. Alias to query method
         :param str query_string: Contains the query terms.
         """
-        return self.query(query_string, entity_types=[EntityType.event])
+        return self.query(query_string, entity_types=[EntityType.event], row_limit=row_limit, start_row=start_row)
 
-    def query_drive_items(self, query_string):
+    def query_drive_items(self, query_string, row_limit=None, start_row=None):
         """Searches OneDrive items. Alias to query method
         :param str query_string: Contains the query terms.
         """
-        return self.query(query_string, entity_types=[EntityType.driveItem])
+        return self.query(query_string, entity_types=[EntityType.driveItem], row_limit=row_limit, start_row=start_row)
 
     @property
     def acronyms(self):

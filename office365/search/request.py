@@ -17,6 +17,8 @@ class SearchRequest(ClientValue):
         sort_properties=None,
         content_sources=None,
         sharepoint_onedrive_options=SharePointOneDriveOptions(),
+        row_limit=None,
+        start_row=None,
     ):
         """
         :param office365.search.query.SearchQuery query: Contains the query terms.
@@ -43,3 +45,5 @@ class SearchRequest(ClientValue):
         self.sortProperties = ClientValueCollection(SortProperty, sort_properties)
         self.contentSources = StringCollection(content_sources)
         self.sharePointOneDriveOptions = sharepoint_onedrive_options
+        self.rowLimit = row_limit
+        self.startRow = start_row
